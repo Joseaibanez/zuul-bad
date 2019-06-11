@@ -34,23 +34,54 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room celdaJugador, bloqueCeldas, celdaA, celdaB, pasilloCentral, cocina, moduloAislamiento, comedor,
+        pasilloEste, pasilloOeste, patio, taller, enfermeria, baños, lavanderia, tunel, salidaSecreta,
+        moduloIngresos, entrada;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        celdaJugador = new Room("en tu celda");
+        bloqueCeldas = new Room("en el bloque de celdas");
+        celdaA = new Room("en una pequeña celda");
+        celdaB = new Room("en una celda espaciosa");
+        pasilloCentral = new Room("en un largo pasillo");
+        cocina = new Room("en la cocina");
+        moduloAislamiento = new Room("en el modulo de aislamiento");
+        comedor = new Room("en el comedor");
+        pasilloEste = new Room("en un pasillo estrecho");
+        pasilloOeste = new Room("en un pasillo");
+        patio = new Room("en el patio");
+        taller = new Room("en el taller");
+        enfermeria = new Room("en la enfermeria");
+        baños = new Room("en los baños");
+        lavanderia = new Room("en la lavanderia");
+        tunel = new Room("en un pequeño tunel");
+        salidaSecreta = new Room("en una salida a la parte trasera de la prision");
+        moduloIngresos = new Room("en el modulo de ingresos");
+        entrada = new Room("en la entrada de la prision");
         
         // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        //Los parametros van por este orden (norte, este, sur, oeste)
+        celdaJugador.setExits(null, null, bloqueCeldas, null);
+        bloqueCeldas.setExits(celdaJugador, celdaB, pasilloCentral, celdaA);
+        pasilloCentral.setExits(bloqueCeldas, cocina, comedor, moduloAislamiento);
+        comedor.setExits(pasilloCentral, pasilloEste, moduloIngresos, pasilloOeste);
+        moduloIngresos.setExits(comedor, null, entrada, null);
+        celdaA.setExits(null, bloqueCeldas, null, null);
+        celdaB.setExits(null, null, null, bloqueCeldas);
+        cocina.setExits(null, null, null, pasilloCentral);
+        moduloAislamiento.setExits(null, pasilloCentral, null, null);
+        pasilloEste.setExits(null, patio, taller, comedor);
+        taller.setExits(pasilloEste, null, null, null);
+        patio.setExits(null, null, null, pasilloEste);
+        pasilloOeste.setExits(null, comedor, enfermeria, baños);
+        enfermeria.setExits(pasilloOeste, null, null, null);
+        lavanderia.setExits(baños, null, null, null);
+        baños.setExits(tunel, pasilloOeste, lavanderia, null);
+        tunel.setExits(salidaSecreta, null, null, null);
+        salidaSecreta.setExits(null, null, tunel, null);
+        celdaB.setExits(moduloIngresos, null, null, null);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = celdaJugador;  // empieza el juego en la celda del jugador
     }
 
     /**
