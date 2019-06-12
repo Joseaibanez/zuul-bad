@@ -43,12 +43,12 @@ public class Game
         bloqueCeldas = new Room("en el bloque de celdas");
         celdaA = new Room("en una pequeña celda");
         celdaB = new Room("en una celda espaciosa");
-        pasilloCentral = new Room("en un largo pasillo");
+        pasilloCentral = new Room("en el pasillo central");
         cocina = new Room("en la cocina");
         moduloAislamiento = new Room("en el modulo de aislamiento");
         comedor = new Room("en el comedor");
-        pasilloEste = new Room("en un pasillo estrecho");
-        pasilloOeste = new Room("en un pasillo");
+        pasilloEste = new Room("en el pasillo del ala este");
+        pasilloOeste = new Room("en el pasillo del ala oeste");
         patio = new Room("en el patio");
         taller = new Room("en el taller");
         enfermeria = new Room("en la enfermeria");
@@ -61,25 +61,25 @@ public class Game
         
         // initialise room exits
         //Los parametros van por este orden (norte, este, sur, oeste)
-        celdaJugador.setExits(null, null, bloqueCeldas, null);
-        bloqueCeldas.setExits(celdaJugador, celdaB, pasilloCentral, celdaA);
-        pasilloCentral.setExits(bloqueCeldas, cocina, comedor, moduloAislamiento);
-        comedor.setExits(pasilloCentral, pasilloEste, moduloIngresos, pasilloOeste);
-        moduloIngresos.setExits(comedor, null, entrada, null);
-        celdaA.setExits(null, bloqueCeldas, null, null);
-        celdaB.setExits(null, null, null, bloqueCeldas);
-        cocina.setExits(null, null, null, pasilloCentral);
-        moduloAislamiento.setExits(null, pasilloCentral, null, null);
-        pasilloEste.setExits(null, patio, taller, comedor);
-        taller.setExits(pasilloEste, null, null, null);
-        patio.setExits(null, null, null, pasilloEste);
-        pasilloOeste.setExits(null, comedor, enfermeria, baños);
-        enfermeria.setExits(pasilloOeste, null, null, null);
-        lavanderia.setExits(baños, null, null, null);
-        baños.setExits(tunel, pasilloOeste, lavanderia, null);
-        tunel.setExits(salidaSecreta, null, null, null);
-        salidaSecreta.setExits(null, null, tunel, null);
-        celdaB.setExits(moduloIngresos, null, null, null);
+        celdaJugador.setExits(null, null, bloqueCeldas, null, null);
+        bloqueCeldas.setExits(celdaJugador, celdaB, pasilloCentral, celdaA, null);
+        pasilloCentral.setExits(bloqueCeldas, cocina, comedor, moduloAislamiento, pasilloEste);
+        comedor.setExits(pasilloCentral, pasilloEste, moduloIngresos, pasilloOeste, null);
+        moduloIngresos.setExits(comedor, null, entrada, null, null);
+        celdaA.setExits(null, bloqueCeldas, null, null, null);
+        celdaB.setExits(null, null, null, bloqueCeldas, null);
+        cocina.setExits(null, null, null, pasilloCentral, null);
+        moduloAislamiento.setExits(null, pasilloCentral, null, null, null);
+        pasilloEste.setExits(null, patio, taller, comedor, null);
+        taller.setExits(pasilloEste, null, null, null, null);
+        patio.setExits(null, null, null, pasilloEste, null);
+        pasilloOeste.setExits(null, comedor, enfermeria, baños, moduloIngresos);
+        enfermeria.setExits(pasilloOeste, null, null, null, null);
+        lavanderia.setExits(baños, null, null, null, null);
+        baños.setExits(tunel, pasilloOeste, lavanderia, null, null);
+        tunel.setExits(salidaSecreta, null, null, null, null);
+        salidaSecreta.setExits(null, null, tunel, null, null);
+        celdaB.setExits(moduloIngresos, null, null, null, null);
 
         currentRoom = celdaJugador;  // empieza el juego en la celda del jugador
     }
@@ -99,7 +99,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("Gracias por jugar.  Hasta la próxima.");
     }
 
     /**
@@ -187,7 +187,9 @@ public class Game
         if(direction.equals("west")) {
             nextRoom = currentRoom.westExit;
         }
-
+        if(direction.equals("southEast")) {
+            nextRoom = currentRoom.southEastExit;
+        }
         if (nextRoom == null) {
             System.out.println("No hay salida!");
         }
@@ -227,6 +229,9 @@ public class Game
         }
         if(currentRoom.westExit != null) {
             System.out.print("west ");
+        }
+        if(currentRoom.southEastExit != null) {
+            System.out.print("southEast ");
         }
         System.out.println();
     }
